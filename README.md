@@ -31,9 +31,6 @@ Before accessing the database, ensure the following:
 1. A Kubernetes cluster is set up in the E2E environment.
 2. The database pods are deployed, and a NodePort service is configured.
 3. Access to the same VPC as the Kubernetes cluster.
-4. Required tools installed on your local or jump server:
-   - `kubectl`
-   - Database client (e.g., MongoDB Compass)
 
 ---
 
@@ -41,57 +38,21 @@ Before accessing the database, ensure the following:
 
 ### **Method 1: Using SSL VPN**
 
-#### Step 1: Create a Firewall in the Same VPC
-- Create a firewall under the same VPC as the Kubernetes cluster.
+1. **Create a Firewall in the Same VPC as the Kubernetes Cluster**  
+   Ensure that the firewall is created under the same VPC used to create your Kubernetes cluster.
 
-#### Step 2: Log in to the Firewall
-- Use your email credentials to log in to the firewall.
+2. **Log in to the Firewall**  
+   Open the FortiGate firewall dashboard using your email credentials.  
+   ![FortiGate Dashboard](images/forti-dash.png)
 
-#### Step 3: Configure SSL VPN
-- Follow the [SSL VPN Configuration Guide](https://docs.google.com/document/d/1ja7qRqF462CqG-V5GSnTSpn7HxjJLJXVxPz2pgKGA/edit?tab=t.0).
+3. **Configure SSL VPN**  
+   Follow the provided [documentation](https://docs.google.com/document/d/1ja7qRqF462CqG-V5GSnTSpn7HxjJLJXVxPz2pgKGA/edit?tab=t.0) to configure SSL VPN for the firewall.
 
-#### Step 4: Set Up a NodePort Service
-- Create a NodePort service to expose your database pods.
+4. **Set Up a NodePort Service for Database Pods**  
+   Create a NodePort service for your database pods, deployment, or StatefulSet.
 
-#### Step 5: Connect to the SSL VPN
-- Connect to the SSL VPN from your local machine and verify connectivity by pinging Kubernetes worker nodes.
-
-#### Step 6: Access the Database
-- Use any worker node's VPC IP and the NodePort to connect via a database client.
-
----
-
-### **Method 2: Using a Jump Server**
-
-#### Step 1: Set Up a Jump Server
-- Create a jump server under the same VPC as the Kubernetes cluster.
-
-#### Step 2: Configure XRDP for GUI Access
-- Install and configure XRDP to enable GUI access on the jump server.
-
-#### Step 3: Set Up a NodePort Service
-- Create a NodePort service for your database pods.
-
-#### Step 4: Install a MongoDB Client Tool
-- Install a MongoDB client tool on the jump server.
-- Use the worker node's IP and NodePort to connect to the database.
-
----
-
-## **Example NodePort YAML Configuration**
-
-Use the following YAML configuration to create a NodePort service for your database pods:
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: db-service
-spec:
-  type: NodePort
-  ports:
-    - port: 27017
-      targetPort: 27017
-      nodePort: 30017
-  selector:
-    app: database
+5. **Verify the Service and Pods**  
+   Use the following commands to check the status:  
+   ```bash
+   kubectl get pods
+   kubectl get svc
