@@ -1,5 +1,5 @@
 
-# How to Access E2E Kubernetes Database Service
+# How to Access Kubernetes Database Service
 
 ## Prerequisites
 
